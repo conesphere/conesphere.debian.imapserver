@@ -1,0 +1,19 @@
+---
+# tasks file for conesphere.debian.dovecot
+- name: remove exim4
+  apt:
+    name:
+      - exim4
+    state: absent
+- name: install dovecot sieve etc
+  apt:
+    name:
+      - dovecot-imapd
+      - dovecot-antispam
+      - dovecot-sieve
+      - dovecot-managesieved
+      - dovecot-lmtpd
+      - opensmtpd
+      - dkimproxy
+    state: latest
+ 
