@@ -1,2 +1,9 @@
 ---
 # handlers file for conesphere.debian.dovecot
+- name: dovecot_restart
+  service:
+    name: dovecot
+    enabled: yes
+    state: restarted
+
+  

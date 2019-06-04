@@ -2,6 +2,8 @@
 # tasks file for conesphere.debian.dovecot
 #- name: include debian base role
 #  include_role: conesphere.debian.base
+# First of all we do bare function. special stuff like tally2 comes 
+#   in later as soon as we have sorted tally2 bugs out. 
 - name: remove exim4
   apt:
     name:
@@ -20,13 +22,32 @@
     state: latest
 - name: configfiles
   template:
-    name:
-      - dovecot-imapd
-      - dovecot-antispam
-      - dovecot-sieve
-      - dovecot-managesieved
-      - dovecot-lmtpd
-      - opensmtpd
-      - dkimproxy
-    state: latest
+    src: '{{ item }}.j2'
+    dest: '/etc/dovecot/conf.d/{{ item }}'
+    owner: root
+    group: root
+    mode: '0644'
+  with_items:
+    - 10-logging.conf
+    - 10-mail.conf
+    - 20-imap.conf
+    - 10-master.conf
+    - 10-ssl.conf
+    # - 20-lmtp.conf ## not sure yet if we should touch lmtp conf
+  notify: dovecot_restart
+- name: dovecot_archive.pl
+  template:
+    src: 'dovecot_archive.pl.j2'
+    dest: '/usr/bin/dovecot_archive.pl'
+    owner: root
+    group: root
+    mode: '0755'
+  with_items:
+    - 10-logging.conf
+    - 10-mail.conf
+    - 20-imap.conf
+    - 10-master.conf
+    - 10-ssl.conf
+    # - 20-lmtp.conf ## not sure yet if we should touch lmtp conf
+  notify: dovecot_restart
  
