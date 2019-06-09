@@ -75,6 +75,14 @@
     group: root
     mode: '0644'
   notify: opensmtpd_restart
+- name: create mailname
+  template:
+    src: 'mailname.j2'
+    dest: '/etc/mailname'
+    owner: root
+    group: root
+    mode: '0644'
+  notify: opensmtpd_restart
 - name: /etc/mail
   file:
     dest: /etc/mail

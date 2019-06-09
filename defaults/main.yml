@@ -3,6 +3,7 @@
 imap_server_name: '{{ ansible_hostname }}'
 imap_imap_server_name: 'imap.{{ imap_server_name }}'
 imap_smtp_server_name: 'smtp.{{ imap_server_name }}'
+imap_smtp_mailname: '{{ imap_server_name }}'
 imap_ssl_cert: '/etc/letsencrypt/live/{{ imap_imap_server_name }}/cert.pem'
 imap_ssl_key: '/etc/letsencrypt/live/{{ imap_imap_server_name }}/privkey.pem'
 imap_ssl_ca: '/etc/letsencrypt/live/{{ imap_imap_server_name }}/fullchain.pem'
