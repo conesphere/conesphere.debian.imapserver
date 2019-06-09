@@ -26,8 +26,8 @@ accept from local for domain <domains> virtual <virtualmap> deliver to lmtp loca
 # accept from local for domain <domains> deliver to lmtp
 {% if imap_smtp_relay is defined %}
 table relayauth file:/etc/smtp_relayauth
-accept from local for any relay via smtps+auth://{{ imap_smtp_server_name }}@{{ imap_smtp_relay }} auth <relayauth>
+accept from local for any relay via smtps+auth://{{ imap_smtp_server_name }}@{{ imap_smtp_relay }} auth <relayauth> hostname {{ imap_smtp_server_name }}
 {% else %}
-accept from local for any relay 
+accept from local for any relay hostname {{ imap_smtp_server_name }}
 {% endif %}
 
