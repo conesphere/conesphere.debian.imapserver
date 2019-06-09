@@ -10,18 +10,18 @@ pki {{ imap_smtp_server_name }} certificate "{{ imap_ssl_cert }}"
 pki {{ imap_smtp_server_name }} key "{{ imap_ssl_key }}"
 
 # If you edit the file, you have to run "smtpctl update table aliases"
-table senders file:/etc/mail/senders
+table mailsenders file:/etc/mail/senders
 # this one does contain secrets and ist put on seperate dir therfore
 table virtualmap file:/etc/mail/virtualmap
 table domains file:/etc/mail/domains
 
 # To accept external mail, replace with: listen on all
 listen on localhost
-listen on all port 587 tls-require pki {{ imap_smtp_server_name }} auth senders <senders>
+listen on {{ imap_listen_if }} port 587 tls-require pki {{ imap_smtp_server_name }} auth senders <mailsenders>
 
 # sort mail to users however that might be done. either by virtualmap 
 # or via domain/aliases delivery
-accept from local for domain <domains> virtual <virtualmap> deliver to lmtp
+accept from local for domain <domains> virtual <virtualmap> deliver to maildir
 # not sure yet if I have to catch a default local user delivery
 # accept from local for domain <domains> deliver to lmtp
 {% if imap_smtp_relay is defined %}
