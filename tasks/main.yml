@@ -1,7 +1,8 @@
 ---
 # tasks file for conesphere.debian.dovecot
 - name: include debian base role
-  include_role: conesphere.debian.base
+  include_role:
+    name: conesphere.debian.base
   vars:
     debian_base_sshd_config_disable: True
     debian_base_smtpd_disable: True
