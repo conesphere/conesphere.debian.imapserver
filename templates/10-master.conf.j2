@@ -46,6 +46,10 @@ service pop3-login {
 }
 
 service lmtp {
+  inet_listener lmtp {
+    address = 127.0.0.1 ::1
+    port = 10025
+  }
   unix_listener lmtp {
     mode = 0666
   }

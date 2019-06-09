@@ -25,6 +25,11 @@
       - opensmtpd
       - dkimproxy
     state: latest
+- name: remove amavisd-new
+  apt:
+    name:
+      - amavisd-new
+    state: absent
 - name: configfiles
   template:
     src: '{{ item }}.j2'

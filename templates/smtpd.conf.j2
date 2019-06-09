@@ -21,7 +21,7 @@ listen on {{ imap_listen_if }} port 587 tls-require pki {{ imap_smtp_server_name
 
 # sort mail to users however that might be done. either by virtualmap 
 # or via domain/aliases delivery
-accept from local for domain <domains> virtual <virtualmap> deliver to maildir
+accept from local for domain <domains> virtual <virtualmap> deliver to lmtp localhost:10025
 # not sure yet if I have to catch a default local user delivery
 # accept from local for domain <domains> deliver to lmtp
 {% if imap_smtp_relay is defined %}
@@ -31,32 +31,3 @@ accept from local for any relay via smtps+auth://{{ imap_smtp_server_name }}@{{ 
 accept from local for any relay 
 {% endif %}
 
-#  accept from local sender <senderaddresses> for any relay via smtps+auth://listrat@mail1.conesphere.com:587 auth <relayauth>
-#  accept tagged ! Filtered from local sender <senderaddresses> for any relay via smtps+auth://listrat@mail1.conesphere.com:587 auth <relayauth>
-#  
-#  table aliases file:/etc/aliases
-#  table relayauth file:/etc/smtpd/relayauth
-#  
-#  
-#  # Uncomment the following to accept external mail for domain "example.org"
-#  #accept from any for domain "example.org" alias <aliases> deliver to mbox
-#  
-#  accept for local alias <aliases> deliver to mbox
-#  accept from local for any relay via smtps+auth://listrat@mail1.conesphere.com:587 auth <relayauth>
-#  
-#  
-#  
-#  # This is the smtpd server system-wide configuration file.
-#  # See smtpd.conf(5) for more information.
-#  
-#  
-#  # If you edit the file, you have to run "smtpctl update table aliases"
-#  table credentials file:/etc/smtpd/credentials
-#  table rootcredentials file:/etc/smtpd/rootcredentials
-#  table senderaddresses file:/etc/smtpd/senderaddresses
-#  table relayauth file:/etc/smtpd/relayauth
-#  
-#  # To accept external mail, replace with: listen on all
-#  accept tagged ! Filtered from local sender <senderaddresses> for any relay via smtps+auth://listrat@mail1.conesphere.com:587 auth <relayauth>
-#  
-#  
