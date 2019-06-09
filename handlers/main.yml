@@ -5,5 +5,14 @@
     name: dovecot
     enabled: yes
     state: restarted
-
+- name: sshd_restart
+  service:
+    name: sshd
+    enabled: yes
+    state: restarted
+- name: opensmtpd_restart
+  service:
+    name: opensmtpd
+    enabled: yes
+    state: restarted
   

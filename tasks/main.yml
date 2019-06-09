@@ -1,12 +1,16 @@
 ---
 # tasks file for conesphere.debian.dovecot
-#- name: include debian base role
-#  include_role: conesphere.debian.base
+- name: include debian base role
+  include_role: conesphere.debian.base
+  vars:
+    debian_base_sshd_config_disable: True
+    debian_base_smtpd_disable: True
 # First of all we do bare function. special stuff like tally2 comes 
 #   in later as soon as we have sorted tally2 bugs out. 
 - name: remove exim4
   apt:
     name:
+      - ssmtp
       - exim4
     state: absent
 - name: install dovecot sieve etc
@@ -42,12 +46,51 @@
     owner: root
     group: root
     mode: '0755'
+- name: setup sshd config
+  template:
+    src: 'sshd_config.j2'
+    dest: '/etc/ssh/sshd_config'
+    owner: root
+    group: root
+    mode: '0644'
+- name: setup sshd config
+  template:
+    src: 'sshd_config.j2'
+    dest: '/etc/ssh/sshd_config'
+    owner: root
+    group: root
+    mode: '0644'
+  notify: sshd_restart
+- name: setup opensmtpd 
+  template:
+    src: 'smtpd_conf.j2'
+    dest: '/etc/smtpd.conf'
+    owner: root
+    group: root
+    mode: '0644'
+  notify: opensmtpd_restart
+- name: /etc/mail
+  file:
+    dest: /etc/mail
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+- name: create tables files if not there 
+  shell: "touch /etc/mail/{{ item }}"
+  args:
+    creates: "/etc/mail/{{ item }}"
   with_items:
-    - 10-logging.conf
-    - 10-mail.conf
-    - 20-imap.conf
-    - 10-master.conf
-    - 10-ssl.conf
-    # - 20-lmtp.conf ## not sure yet if we should touch lmtp conf
-  notify: dovecot_restart
- 
+    - senders
+    - domains
+    - virtualmap
+  notify: opensmtpd_restart
+- name: setup relaypassword
+  template:
+    src: 'smtpd_relayauth.j2'
+    dest: '/etc/smtp_relayauth'
+    owner: root
+    group: root
+    mode: '0600'
+  when: "imap_smtp_relay is defined"
+  notify: opensmtpd_restart

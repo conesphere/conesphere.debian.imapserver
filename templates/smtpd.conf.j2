@@ -1,0 +1,62 @@
+# This is the smtpd server system-wide configuration file.
+# See smtpd.conf(5) for more information.
+
+# this file is created as smtp inbound/outbound to send and receive mail for this dovecot server... 
+
+max-message-size 200M
+
+# we use letsencrypt for certs 
+pki smtp.{{ imap_hostname }} certificate "{{ imap_ssl_cert }}"
+pki smtp.{{ imap_hostname }} key "{{ imap_ssl_key }}"
+
+# If you edit the file, you have to run "smtpctl update table aliases"
+table senders file:/etc/mail/senders
+# this one does contain secrets and ist put on seperate dir therfore
+table virtualmap file:/etc/mail/virtualmap
+table domains file:/etc/mail/domains
+
+# To accept external mail, replace with: listen on all
+listen on localhost
+listen on all port 587 tls-require pki mypki auth senders <senders>
+
+# sort mail to users however that might be done. either by virtualmap 
+# or via domain/aliases delivery
+accept from local for domain <domains> virtual <virtualmap> deliver to lmtp
+# not sure yet if I have to catch a default local user delivery
+# accept from local for domain <domains> deliver to lmtp
+{% if imap_smtp_relay is defined %}
+table relayauth file:/etc/smtp_relayauth
+accept from local for any relay via smtps+auth://{{ imap_smtp_server_name }}@{{ imap_smtp_relay }} auth <relayauth>
+{% else %}
+accept from local for any relay 
+{% endif %}
+
+#  accept from local sender <senderaddresses> for any relay via smtps+auth://listrat@mail1.conesphere.com:587 auth <relayauth>
+#  accept tagged ! Filtered from local sender <senderaddresses> for any relay via smtps+auth://listrat@mail1.conesphere.com:587 auth <relayauth>
+#  
+#  table aliases file:/etc/aliases
+#  table relayauth file:/etc/smtpd/relayauth
+#  
+#  
+#  # Uncomment the following to accept external mail for domain "example.org"
+#  #accept from any for domain "example.org" alias <aliases> deliver to mbox
+#  
+#  accept for local alias <aliases> deliver to mbox
+#  accept from local for any relay via smtps+auth://listrat@mail1.conesphere.com:587 auth <relayauth>
+#  
+#  
+#  
+#  # This is the smtpd server system-wide configuration file.
+#  # See smtpd.conf(5) for more information.
+#  
+#  
+#  # If you edit the file, you have to run "smtpctl update table aliases"
+#  table credentials file:/etc/smtpd/credentials
+#  table rootcredentials file:/etc/smtpd/rootcredentials
+#  table senderaddresses file:/etc/smtpd/senderaddresses
+#  table relayauth file:/etc/smtpd/relayauth
+#  
+#  # To accept external mail, replace with: listen on all
+#  accept tagged ! Filtered from local sender <senderaddresses> for any relay via smtps+auth://listrat@mail1.conesphere.com:587 auth <relayauth>
+#  
+#  
