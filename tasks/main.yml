@@ -64,7 +64,7 @@
   notify: sshd_restart
 - name: setup opensmtpd 
   template:
-    src: 'smtpd_conf.j2'
+    src: 'smtpd.conf.j2'
     dest: '/etc/smtpd.conf'
     owner: root
     group: root
