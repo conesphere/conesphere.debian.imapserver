@@ -10,5 +10,6 @@ imap_ssl_ca: '/etc/letsencrypt/live/{{ imap_imap_server_name }}/fullchain.pem'
 
 imap_smtp_relay_password: "SomeCompletelyUselessDefault"
 imap_smtp_relay_user: "{{ imap_smtp_server_name }}" 
+imap_smtp_relay_port: "587" 
 
 imap_listen_if: all
