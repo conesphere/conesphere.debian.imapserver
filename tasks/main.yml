@@ -43,7 +43,7 @@
     - 20-imap.conf
     - 10-master.conf
     - 10-ssl.conf
-    # - 20-lmtp.conf ## not sure yet if we should touch lmtp conf
+    - 20-lmtp.conf 
   notify: dovecot_restart
 - name: dovecot_archive.pl
   template:
