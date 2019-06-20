@@ -44,6 +44,7 @@
     - 10-master.conf
     - 10-ssl.conf
     - 20-lmtp.conf 
+    - 90-sieve.conf 
   notify: dovecot_restart
 - name: dovecot_archive.pl
   template:
