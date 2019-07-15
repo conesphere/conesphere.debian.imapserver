@@ -18,6 +18,7 @@ table domains file:/etc/mail/domains
 # To accept external mail, replace with: listen on all
 listen on localhost
 listen on {{ imap_listen_if }} port 587 tls-require pki {{ imap_smtp_server_name }} auth senders <mailsenders>
+listen on {{ imap_listen_if }} port 465 smtps pki {{ imap_smtp_server_name }} auth senders <mailsenders>
 
 # sort mail to users however that might be done. either by virtualmap 
 # or via domain/aliases delivery
